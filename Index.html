@@ -3,558 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health-Focused Meal Planner Pro</title>
+    <title>Smart Meal Planner Pro with Health Targeting</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* [Previous styles remain exactly the same, adding specific styles for the new selector] */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #2c6e49; --primary-dark: #1d5235; --secondary: #fefee3; --accent: #d68c45; --light: #f7f9f9; --dark: #333333; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --gray: #e0e0e0; --shadow: 0 4px 20px rgba(0, 0, 0, 0.08); --radius: 12px; }
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #e0f7fa 0%, #bbdefb 100%); color: var(--dark); line-height: 1.6; padding: 20px; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; padding: 30px 0; margin-bottom: 20px; }
+        h1 { font-family: 'Montserrat', sans-serif; font-size: 3.2rem; color: var(--primary-dark); margin-bottom: 10px; letter-spacing: -0.5px; }
+        .subtitle { font-size: 1.3rem; color: var(--primary); max-width: 700px; margin: 0 auto 20px; font-weight: 500; }
+        .note { background: #e8f5e9; border-left: 4px solid var(--success); padding: 15px 20px; border-radius: 0 8px 8px 0; margin: 0 auto 30px; max-width: 800px; font-size: 1rem; display: flex; align-items: center; gap: 12px; }
         
-        :root {
-            --primary: #2c6e49;
-            --primary-dark: #1d5235;
-            --secondary: #fefee3;
-            --accent: #d68c45;
-            --light: #f7f9f9;
-            --dark: #333333;
-            --success: #4caf50;
-            --warning: #ff9800;
-            --danger: #f44336;
-            --gray: #e0e0e0;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --radius: 12px;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #e0f7fa 0%, #bbdefb 100%);
-            color: var(--dark);
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            padding: 30px 0;
-            margin-bottom: 20px;
-        }
-        
-        h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 3.2rem;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
-        }
-        
-        .subtitle {
-            font-size: 1.3rem;
-            color: var(--primary);
-            max-width: 700px;
-            margin: 0 auto 20px;
-            font-weight: 500;
-        }
-        
-        .note {
-            background: #e8f5e9;
-            border-left: 4px solid var(--success);
-            padding: 15px 20px;
-            border-radius: 0 8px 8px 0;
-            margin: 0 auto 30px;
-            max-width: 800px;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .controls {
+        /* New Health Goal Selector Styles */
+        .goal-selector {
             background: white;
+            padding: 30px;
             border-radius: var(--radius);
-            padding: 25px;
             box-shadow: var(--shadow);
             margin-bottom: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
         }
-        
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: #e8f5e9;
+        .goal-title { font-size: 1.5rem; color: var(--primary-dark); margin-bottom: 20px; font-weight: 700; }
+        .goal-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .goal-option {
+            display: none; /* Hide actual radio button */
+        }
+        .goal-label {
             padding: 15px 25px;
-            border-radius: 50px;
-        }
-
-        .control-group label {
-            font-weight: 600;
-            color: var(--primary-dark);
-            font-size: 1.1rem;
-            white-space: nowrap;
-        }
-        
-        .control-group input, .control-group select {
-            padding: 10px 15px;
-            border: 2px solid var(--primary);
-            border-radius: 50px;
-            font-size: 1rem;
-            font-family: inherit;
-            outline: none;
-        }
-
-        .control-group select {
-            cursor: pointer;
-            background-color: white;
-            min-width: 250px;
-        }
-        
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(44, 110, 73, 0.3);
-            font-weight: 500;
-        }
-        
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(44, 110, 73, 0.4);
-        }
-        
-        .btn-generate {
-            background: var(--accent);
-            box-shadow: 0 4px 15px rgba(214, 140, 69, 0.3);
-        }
-        
-        .btn-generate:hover {
-            background: #c07a3a;
-            box-shadow: 0 6px 20px rgba(214, 140, 69, 0.4);
-        }
-
-        .btn-print-list {
-            background: #1976d2;
-            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
-        }
-        
-        .btn-print-list:hover {
-            background: #1565c0;
-            box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
-        }
-        
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        .meal-plan {
-            flex: 1;
-            min-width: 300px;
-            background: white;
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-        }
-        
-        .shopping-list {
-            flex: 1;
-            min-width: 300px;
-            background: white;
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            color: var(--primary-dark);
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0f2f1;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .day-card {
-            background: #f8fdfa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary);
-            position: relative;
-        }
-        
-        .day-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .day-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e0f2f1;
-        }
-        
-        .day-name {
-            font-weight: 700;
-            font-size: 1.4rem;
-            color: var(--primary-dark);
-        }
-        
-        .day-calories {
-            background: var(--primary);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        .meal {
-            margin-bottom: 18px;
-            padding: 15px;
-            border-radius: 8px;
-            background: #e8f5e9;
-            position: relative;
-            transition: all 0.2s ease;
-        }
-        
-        .meal:hover {
-            background: #d1e7dd;
-        }
-        
-        .meal-title {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .meal-name {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-        
-        .meal-ingredients {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 15px;
-        }
-        
-        .meal-calories {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .meal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        
-        .action-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .action-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .shopping-items {
-            list-style-type: none;
-        }
-        
-        .shopping-item {
-            padding: 14px 15px;
-            border-bottom: 1px solid #e0f2f1;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s ease;
-        }
-        
-        .shopping-item:last-child {
-            border-bottom: none;
-        }
-        
-        .shopping-item:hover {
-            background: #f5fbff;
-        }
-        
-        .shopping-item input {
-            margin-right: 15px;
-            width: 22px;
-            height: 22px;
-            cursor: pointer;
-        }
-        
-        .shopping-item label {
-            flex: 1;
-            cursor: pointer;
-            font-size: 1.05rem;
-        }
-        
-        .shopping-item.checked label {
-            text-decoration: line-through;
-            color: #95a5a6;
-        }
-        
-        .category {
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin: 25px 0 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0f2f1;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .nightshade-info {
-            background: #fff8e1;
-            border-left: 4px solid var(--warning);
-            padding: 20px;
-            border-radius: 0 10px 10px 0;
-            margin: 25px 0;
-            font-size: 1rem;
-            display: flex;
-            gap: 15px;
-        }
-        
-        .meal-options {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 15px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            z-index: 10;
-            width: 280px;
-            max-height: 350px;
-            overflow-y: auto;
-        }
-        
-        .meal-option {
-            padding: 14px 20px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: 1.05rem;
-        }
-        
-        .meal-option:hover {
-            background: #e8f5e9;
-        }
-        
-        /* Modal Styles */
-        .modal, .nutrition-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content, .nutrition-content {
-            background: white;
-            border-radius: var(--radius);
-            width: 90%;
-            max-width: 700px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 35px;
-            position: relative;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: #777;
-            background: none;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        
-        .close-modal:hover {
-            color: #000;
             background: #f0f0f0;
-        }
-        
-        .recipe-title, .nutrition-title {
-            font-size: 2rem;
-            color: var(--primary-dark);
-            margin-bottom: 20px;
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .recipe-section { margin-bottom: 25px; }
-        .recipe-section h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e0f2f1;
-        }
-        
-        .ingredients-list, .instructions-list { padding-left: 25px; }
-        .ingredients-list li, .instructions-list li { margin-bottom: 12px; }
-        
-        .prep-time {
+            border: 2px solid transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #555;
             display: flex;
-            justify-content: space-around;
-            background: #e8f5e9;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 25px 0;
+            align-items: center;
+            gap: 10px;
         }
+        .goal-label:hover { background: #e0e0e0; transform: translateY(-2px); }
+        .goal-option:checked + .goal-label {
+            background: #e8f5e9;
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            box-shadow: 0 4px 10px rgba(44, 110, 73, 0.2);
+        }
+        .goal-label i { font-size: 1.2rem; }
+
+        .controls { background: white; border-radius: var(--radius); padding: 25px; box-shadow: var(--shadow); margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; }
+        .calorie-control { display: flex; align-items: center; gap: 15px; background: #e8f5e9; padding: 15px 25px; border-radius: 50px; }
+        .calorie-control label { font-weight: 600; color: var(--primary-dark); font-size: 1.1rem; }
+        .calorie-control input { width: 100px; padding: 12px 15px; border: 2px solid var(--primary); border-radius: 50px; font-size: 1.1rem; text-align: center; font-weight: 600; }
+        .btn { background: var(--primary); color: white; border: none; padding: 14px 28px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(44, 110, 73, 0.3); font-weight: 500; }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(44, 110, 73, 0.4); }
+        .btn i { font-size: 1.2rem; }
+        .btn-generate { background: var(--accent); box-shadow: 0 4px 15px rgba(214, 140, 69, 0.3); }
+        .btn-generate:hover { background: #c07a3a; box-shadow: 0 6px 20px rgba(214, 140, 69, 0.4); }
+        .btn-print { background: #7b1fa2; box-shadow: 0 4px 15px rgba(123, 31, 162, 0.3); }
+        .btn-print:hover { background: #6a1b9a; box-shadow: 0 6px 20px rgba(123, 31, 162, 0.4); }
+        .btn-print-list { background: #1976d2; box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3); }
+        .btn-print-list:hover { background: #1565c0; box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4); }
         
+        /* Evidence Badge */
+        .evidence-badge {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 5px;
+            border: 1px solid #bbdefb;
+        }
+
+        /* Rest of existing styles */
+        .content { display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 40px; }
+        .meal-plan { flex: 1; min-width: 300px; background: white; border-radius: var(--radius); padding: 25px; box-shadow: var(--shadow); }
+        .shopping-list { flex: 1; min-width: 300px; background: white; border-radius: var(--radius); padding: 25px; box-shadow: var(--shadow); }
+        .section-title { font-size: 1.8rem; color: var(--primary-dark); margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e0f2f1; display: flex; align-items: center; gap: 12px; }
+        .section-title i { color: var(--primary); }
+        .day-card { background: #f8fdfa; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; border-left: 4px solid var(--primary); position: relative; }
+        .day-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+        .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e0f2f1; }
+        .day-name { font-weight: 700; font-size: 1.4rem; color: var(--primary-dark); }
+        .day-date { color: var(--primary); font-size: 1rem; font-weight: 500; }
+        .day-calories { background: var(--primary); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+        .meal { margin-bottom: 18px; padding: 15px; border-radius: 8px; background: #e8f5e9; position: relative; transition: all 0.2s ease; }
+        .meal:hover { background: #d1e7dd; }
+        .meal-title { font-weight: 600; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .meal-name { font-size: 1.2rem; margin-bottom: 8px; color: var(--primary-dark); font-weight: 600; }
+        .meal-ingredients { font-size: 0.95rem; color: #555; margin-bottom: 15px; }
+        .meal-calories { font-weight: 600; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .meal-actions { display: flex; gap: 12px; margin-top: 10px; }
+        .action-btn { background: var(--primary); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .action-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+        .swap-btn:hover { transform: rotate(90deg); }
+        .recipe-btn { background: #43a047; }
+        .recipe-btn:hover { background: #2e7d32; }
+        .nutrition-btn { background: var(--accent); }
+        .nutrition-btn:hover { background: #c07a3a; }
+        .shopping-items { list-style-type: none; }
+        .shopping-item { padding: 14px 15px; border-bottom: 1px solid #e0f2f1; display: flex; align-items: center; transition: all 0.2s ease; }
+        .shopping-item:last-child { border-bottom: none; }
+        .shopping-item:hover { background: #f5fbff; }
+        .shopping-item input { margin-right: 15px; width: 22px; height: 22px; cursor: pointer; }
+        .shopping-item label { flex: 1; cursor: pointer; font-size: 1.05rem; }
+        .shopping-item.checked label { text-decoration: line-through; color: #95a5a6; }
+        .category { font-weight: 700; color: var(--primary-dark); margin: 25px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #e0f2f1; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .category:first-child { margin-top: 0; }
+        footer { text-align: center; padding: 25px; color: var(--primary); font-size: 1rem; font-weight: 500; }
+        @media (max-width: 992px) { .content { flex-direction: column; } .controls { flex-direction: column; } .btn, .calorie-control { width: 100%; justify-content: center; } }
+        .nutrition-info { background: #fff8e1; border-left: 4px solid var(--warning); padding: 20px; border-radius: 0 10px 10px 0; margin: 25px 0; font-size: 1rem; display: flex; gap: 15px; }
+        .meal-options { display: none; position: absolute; top: 50px; right: 15px; background: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); z-index: 10; width: 280px; max-height: 350px; overflow-y: auto; }
+        .meal-option { padding: 14px 20px; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s; font-size: 1.05rem; }
+        .meal-option:hover { background: #e8f5e9; }
+        .meal-option:last-child { border-bottom: none; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: white; border-radius: var(--radius); width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto; padding: 35px; position: relative; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3); }
+        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #777; background: none; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+        .close-modal:hover { color: #000; background: #f0f0f0; }
+        .recipe-title { font-size: 2rem; color: var(--primary-dark); margin-bottom: 20px; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .recipe-section { margin-bottom: 25px; }
+        .recipe-section h3 { color: var(--primary); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e0f2f1; display: flex; align-items: center; gap: 10px; }
+        .ingredients-list, .instructions-list { padding-left: 25px; }
+        .ingredients-list li, .instructions-list li { margin-bottom: 12px; font-size: 1.05rem; }
+        .prep-time { display: flex; justify-content: space-around; background: #e8f5e9; padding: 20px; border-radius: 10px; margin: 25px 0; }
+        .time-item { text-align: center; }
         .time-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
-        .time-label { font-size: 1rem; color: #555; }
-        
-        .nutrition-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin-top: 25px;
-        }
-        
-        .nutrition-card {
-            background: #e8f5e9;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-        }
-        
+        .time-label { font-size: 1rem; color: #555; font-weight: 500; }
+        .nutrition-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; }
+        .nutrition-content { background: white; border-radius: var(--radius); width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 35px; position: relative; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3); }
+        .nutrition-title { font-size: 2rem; color: var(--primary-dark); margin-bottom: 25px; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .nutrition-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-top: 25px; }
+        .nutrition-card { background: #e8f5e9; border-radius: 10px; padding: 25px; text-align: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
         .nutrition-value { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin: 15px 0; }
         .nutrition-label { font-size: 1.2rem; color: var(--primary-dark); font-weight: 600; }
-        
-        /* Quick Stats */
-        .quick-stats {
-            display: flex;
-            justify-content: space-around;
-            background: white;
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-        
-        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
-        
-        /* Ingredient highlight */
-        .ingredient-highlight {
-            background: rgba(44, 110, 73, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-
-        .health-badge {
-            display: inline-block;
-            background: var(--accent);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        @media (max-width: 992px) {
-            .content, .controls, .quick-stats { flex-direction: column; }
-            .btn, .control-group { width: 100%; justify-content: center; }
-        }
-        
-        /* Print Styles */
-        @media print {
-            body { background: white; padding: 0; }
-            .container { max-width: 100%; padding: 0; }
-            header, .controls, .meal-plan, footer, .nightshade-info, .quick-stats { display: none; }
-            .shopping-list { box-shadow: none; padding: 0; margin: 0; }
-            .section-title { text-align: center; border-bottom: 2px solid #000; color: #000; }
-            .two-column { display: flex; flex-wrap: wrap; gap: 30px; }
-            .column { flex: 1; min-width: 300px; }
-            .category { color: #000; border-bottom: 1px solid #000; margin-top: 20px; }
-            .shopping-item { border-bottom: 1px solid #ccc; padding: 8px 0; }
-            .shopping-item input { display: none; }
-        }
-        
+        .nutrition-percentage { font-size: 1rem; color: #555; margin-top: 8px; font-weight: 500; }
+        .daily-values { background: #f5fbff; border-radius: 10px; padding: 20px; margin-top: 30px; font-size: 0.95rem; }
+        .daily-values p { margin: 8px 0; }
         .unit { font-weight: 600; color: var(--primary); margin-left: 5px; }
+        .quick-stats { display: flex; justify-content: space-around; background: white; border-radius: var(--radius); padding: 20px; margin-bottom: 30px; box-shadow: var(--shadow); text-align: center; }
+        .stat-card { padding: 15px; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 1rem; color: #555; margin-top: 5px; }
+        .meal-type { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .meal-type i { font-size: 1.2rem; color: var(--primary); }
+        .ingredient-highlight { background: rgba(44, 110, 73, 0.1); padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+        .calorie-progress { height: 8px; background: #e0e0e0; border-radius: 4px; margin: 10px 0; overflow: hidden; }
+        .calorie-progress-bar { height: 100%; background: var(--primary); border-radius: 4px; }
+        .calorie-info { display: flex; justify-content: space-between; font-size: 0.9rem; color: #555; }
+
+        /* PRINT STYLES */
+        @media print {
+            @page { size: landscape; margin: 0.5cm; }
+            body { background: white; padding: 0; font-size: 12px; }
+            .container { max-width: 100%; padding: 10px; }
+            header, .controls, .goal-selector, footer, .nutrition-info, .quick-stats { display: none; }
+            .content { display: block; margin: 0; }
+            .shopping-list { display: none; }
+            .meal-plan { box-shadow: none; padding: 0; margin: 0; background: white; width: 100%; }
+            .section-title { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; color: #000; display: block; }
+            #mealPlanContainer { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; width: 100%; }
+            .day-card { margin: 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px; border-left: 1px solid #ccc; box-shadow: none; background: white; height: 100%; break-inside: avoid; }
+            .day-header { flex-direction: column; align-items: flex-start; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #eee; }
+            .day-name { font-size: 1.1rem; }
+            .day-date, .day-calories { font-size: 0.8rem; }
+            .day-calories { background: #eee; color: #333; margin-top: 4px; padding: 2px 8px; }
+            .meal { background: #f9f9f9; padding: 8px; margin-bottom: 8px; border: 1px solid #eee; }
+            .meal-type { font-size: 0.8rem; margin-bottom: 4px; }
+            .meal-name { font-size: 0.95rem; margin-bottom: 4px; }
+            .meal-ingredients { font-size: 0.75rem; line-height: 1.3; color: #666; margin-bottom: 4px; }
+            .meal-calories { font-size: 0.8rem; }
+            .meal-actions, .meal-options, .ingredient-highlight, .evidence-badge { display: none !important; }
+            .meal-ingredients span { background: none; padding: 0; }
+            .section-title::after { content: " - Weekly View"; font-size: 0.8em; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-utensils"></i> Health-Focused Meal Planner Pro</h1>
-            <p class="subtitle">Smart meal planning with nutrition tracking and health-focused targeting</p>
+            <h1><i class="fas fa-utensils"></i> Smart Meal Planner Pro</h1>
+            <p class="subtitle">Evidence-based meal planning tailored to your specific health needs</p>
         </header>
+        
+        <div class="goal-selector">
+            <div class="goal-title"><i class="fas fa-bullseye"></i> Step 1: Select Your Health Goal</div>
+            <div class="goal-options">
+                <input type="radio" name="healthGoal" id="inflammation" class="goal-option" value="inflammation" checked>
+                <label for="inflammation" class="goal-label"><i class="fas fa-fire-extinguisher"></i> Reduce Inflammation</label>
+                
+                <input type="radio" name="healthGoal" id="diabetes" class="goal-option" value="diabetes">
+                <label for="diabetes" class="goal-label"><i class="fas fa-tint"></i> Diabetes Management</label>
+                
+                <input type="radio" name="healthGoal" id="cardio" class="goal-option" value="cardio">
+                <label for="cardio" class="goal-label"><i class="fas fa-heartbeat"></i> Cardiovascular Health</label>
+                
+                <input type="radio" name="healthGoal" id="cancer" class="goal-option" value="cancer">
+                <label for="cancer" class="goal-label"><i class="fas fa-shield-virus"></i> Cancer Risk Reduction</label>
+            </div>
+            <div id="goalDescription" style="margin-top: 15px; color: #666; font-size: 0.9rem; font-style: italic;">
+                Prioritizing Omega-3s, berries, leafy greens, and antioxidants.
+            </div>
+        </div>
         
         <div class="quick-stats">
             <div class="stat-card">
@@ -567,7 +222,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-value" id="totalCalories">6,720</div>
-                <div class="stat-label">Total Calories</div>
+                <div class="stat-label">Calories</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value" id="shoppingItems">85</div>
@@ -576,25 +231,15 @@
         </div>
         
         <div class="controls">
-            <div class="control-group">
-                <label for="healthConcern"><i class="fas fa-heartbeat"></i> Health Concern:</label>
-                <select id="healthConcern">
-                    <option value="" disabled selected>Select a health focus...</option>
-                    <option value="inflammation">Reduce Inflammation</option>
-                    <option value="diabetes">Diabetes (Type 2) Management</option>
-                    <option value="cardio">Cardiovascular Health</option>
-                    <option value="cancer">Cancer Risk Reduction</option>
-                </select>
-            </div>
-            <div class="control-group">
+            <div class="calorie-control">
                 <label for="calorieTarget"><i class="fas fa-fire"></i> Daily Calorie Target:</label>
                 <input type="number" id="calorieTarget" min="1200" max="4000" value="2000">
             </div>
             <button class="btn btn-generate" id="generateBtn">
-                <i class="fas fa-random"></i> Generate Plan
+                <i class="fas fa-random"></i> Generate New Meal Plan
             </button>
             <button class="btn btn-print" id="printBtn">
-                <i class="fas fa-print"></i> Print
+                <i class="fas fa-print"></i> Print Weekly Meal Plan
             </button>
             <button class="btn btn-print-list" id="printListBtn">
                 <i class="fas fa-shopping-cart"></i> Print Shopping List
@@ -603,13 +248,9 @@
         
         <div class="content">
             <div class="meal-plan">
-                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Weekly Meal Plan <span id="planLabel" style="font-size: 0.6em; margin-left: 10px; color: var(--accent);"></span></h2>
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Weekly Meal Plan</h2>
                 <div id="mealPlanContainer">
-                    <div style="text-align:center; padding: 40px; color: #777;">
-                        <i class="fas fa-arrow-up fa-3x" style="margin-bottom:15px; display:block;"></i>
-                        Please select a <strong>Health Concern</strong> above and click "Generate Plan" to begin.
                     </div>
-                </div>
             </div>
             
             <div class="shopping-list">
@@ -619,22 +260,16 @@
             </div>
         </div>
         
-        <div class="nightshade-info">
-            <i class="fas fa-leaf fa-2x" style="color: #ff9800;"></i>
-            <div>
-                <strong>Evidence-Based Nutrition:</strong> 
-                Meals are filtered based on your selected health concern using current nutritional research guidelines.
-                <ul>
-                    <li><strong>Inflammation:</strong> Focus on Omega-3s, antioxidants, and low-glycemic foods.</li>
-                    <li><strong>Diabetes:</strong> Focus on high fiber, healthy fats, and protein balance.</li>
-                    <li><strong>Cardio:</strong> Focus on low saturated fat, high soluble fiber, and plant-based variety.</li>
-                    <li><strong>Cancer Risk:</strong> Focus on cruciferous vegetables, diverse plant fibers, and limiting red meats.</li>
-                </ul>
+        <div class="nutrition-info">
+            <i class="fas fa-info-circle fa-2x" style="color: #ff9800;"></i>
+            <div id="nutritionInfoText">
+                <strong>Evidence-Based Strategy:</strong> 
+                Select a health goal above to see how we tailor your nutrition plan.
             </div>
         </div>
         
         <footer>
-            <p>Created with❤️ | Health-Focused Meal Planner Pro | All meals carefully crafted for optimal nutrition</p>
+            <p>Created with ❤️ | Smart Meal Planner Pro | All meals carefully crafted for optimal nutrition</p>
         </footer>
     </div>
     
@@ -642,31 +277,13 @@
         <div class="modal-content">
             <button class="close-modal">&times;</button>
             <h2 class="recipe-title" id="recipeTitle">Recipe Title</h2>
-            
             <div class="prep-time">
-                <div class="time-item">
-                    <div class="time-value" id="prepTime">10</div>
-                    <div class="time-label">Prep Time</div>
-                </div>
-                <div class="time-item">
-                    <div class="time-value" id="cookTime">20</div>
-                    <div class="time-label">Cook Time</div>
-                </div>
-                <div class="time-item">
-                    <div class="time-value" id="totalTime">30</div>
-                    <div class="time-label">Total Time</div>
-                </div>
+                <div class="time-item"><div class="time-value" id="prepTime">10</div><div class="time-label">Prep Time</div></div>
+                <div class="time-item"><div class="time-value" id="cookTime">20</div><div class="time-label">Cook Time</div></div>
+                <div class="time-item"><div class="time-value" id="totalTime">30</div><div class="time-label">Total Time</div></div>
             </div>
-            
-            <div class="recipe-section">
-                <h3><i class="fas fa-list"></i> Ingredients</h3>
-                <ul class="ingredients-list" id="ingredientsList"></ul>
-            </div>
-            
-            <div class="recipe-section">
-                <h3><i class="fas fa-utensils"></i> Instructions</h3>
-                <ol class="instructions-list" id="instructionsList"></ol>
-            </div>
+            <div class="recipe-section"><h3><i class="fas fa-list"></i> Ingredients</h3><ul class="ingredients-list" id="ingredientsList"></ul></div>
+            <div class="recipe-section"><h3><i class="fas fa-utensils"></i> Instructions</h3><ol class="instructions-list" id="instructionsList"></ol></div>
         </div>
     </div>
     
@@ -675,652 +292,357 @@
             <button class="close-modal" id="closeNutritionModal">&times;</button>
             <h2 class="nutrition-title" id="nutritionTitle">Nutrition Information</h2>
             <div class="nutrition-grid">
-                <div class="nutrition-card">
-                    <div class="nutrition-value" id="calories">320</div>
-                    <div class="nutrition-label">Calories</div>
-                </div>
-                <div class="nutrition-card">
-                    <div class="nutrition-value" id="protein">22g</div>
-                    <div class="nutrition-label">Protein</div>
-                </div>
-                <div class="nutrition-card">
-                    <div class="nutrition-value" id="carbs">35g</div>
-                    <div class="nutrition-label">Carbs</div>
-                </div>
-                <div class="nutrition-card">
-                    <div class="nutrition-value" id="fat">12g</div>
-                    <div class="nutrition-label">Fat</div>
-                </div>
+                <div class="nutrition-card"><div class="nutrition-value" id="calories">320</div><div class="nutrition-label">Calories</div><div class="nutrition-percentage">16% of daily value</div></div>
+                <div class="nutrition-card"><div class="nutrition-value" id="protein">22g</div><div class="nutrition-label">Protein</div><div class="nutrition-percentage">44% of daily value</div></div>
+                <div class="nutrition-card"><div class="nutrition-value" id="carbs">35g</div><div class="nutrition-label">Carbs</div><div class="nutrition-percentage">12% of daily value</div></div>
+                <div class="nutrition-card"><div class="nutrition-value" id="fat">12g</div><div class="nutrition-label">Fat</div><div class="nutrition-percentage">18% of daily value</div></div>
+            </div>
+            <div class="daily-values">
+                <p><strong>Daily Values:</strong> Based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs.</p>
+                <p>Calories: 2,000 • Total Fat: 65g • Cholesterol: 300mg • Sodium: 2,400mg • Total Carbohydrate: 300g • Dietary Fiber: 25g</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Updated meal data with Health Tags based on research
-        // Re-added tomatoes, peppers, potatoes, eggplants
+        // Updated Descriptions based on evidence
+        const goalDescriptions = {
+            inflammation: "Prioritizes Omega-3 rich fish, berries, leafy greens, nuts, and spices like turmeric. Limits processed sugars.",
+            diabetes: "Focuses on low-glycemic index foods, high fiber, non-starchy vegetables, and lean proteins to stabilize blood sugar.",
+            cardio: "Emphasizes heart-healthy fats (nuts, olive oil, avocado), low sodium, fiber-rich whole grains, and limited saturated fats.",
+            cancer: "Plant-forward approach rich in cruciferous vegetables, antioxidants, and whole grains. Limits red and processed meats."
+        };
+
+        const goalInfoText = {
+             inflammation: "<strong>Anti-Inflammatory Strategy:</strong> This plan emphasizes whole, unprocessed foods. We've prioritized meals with berries, fatty fish (rich in Omega-3s), leafy greens, and healthy fats while limiting refined carbohydrates.",
+            diabetes: "<strong>Diabetes Management Strategy:</strong> This plan focuses on steady blood sugar control. Meals feature high fiber, complex carbohydrates, and lean proteins. We avoid high-sugar breakfasts and emphasize the 'Plate Method' balance.",
+            cardio: "<strong>Heart Health Strategy:</strong> This plan follows DASH and Mediterranean diet principles. It prioritizes low-sodium options, potassium-rich fruits and vegetables, and replaces saturated fats with heart-healthy unsaturated fats from nuts and oils.",
+            cancer: "<strong>Cancer Risk Reduction Strategy:</strong> This plan is plant-forward. It maximizes variety in fruits and vegetables (especially cruciferous ones like broccoli), pulses, and whole grains, while strictly limiting red and processed meats."
+        };
+
+        // Adding 'tags' to meals to help the filter logic
+        // In a real app, this would be in the database. Here we infer or add properties.
         const breakfastOptions = [
-            {
-                name: "Overnight Chia Pudding",
-                ingredients: ["chia seeds", "almond milk", "berries", "honey", "vanilla extract"],
-                baseCalories: 280,
-                tags: ["inflammation", "cardio", "cancer", "diabetes"],
-                prepTime: 5, cookTime: 0, totalTime: 5,
-                instructions: ["Mix seeds and milk.", "Add honey and vanilla.", "Chill overnight.", "Top with berries."],
-                nutrition: { protein: "8g", carbs: "35g", fat: "12g" }
-            },
-            {
-                name: "Greek Yogurt Parfait",
-                ingredients: ["Greek yogurt", "granola", "berries", "honey", "almonds"],
-                baseCalories: 320,
-                tags: ["inflammation", "diabetes", "cardio"],
-                prepTime: 5, cookTime: 0, totalTime: 5,
-                instructions: ["Layer yogurt and granola.", "Add berries.", "Top with nuts/honey."],
-                nutrition: { protein: "22g", carbs: "35g", fat: "12g" }
-            },
-            {
-                name: "Vegetable Omelette",
-                ingredients: ["eggs", "spinach", "bell peppers", "onion", "mushrooms", "cheese", "butter"],
-                baseCalories: 290,
-                tags: ["diabetes", "inflammation"],
-                prepTime: 10, cookTime: 5, totalTime: 15,
-                instructions: ["Whisk eggs.", "Saute peppers and onions.", "Cook eggs.", "Fold with cheese."],
-                nutrition: { protein: "22g", carbs: "6g", fat: "20g" }
-            },
-            {
-                name: "Oatmeal with Walnuts & Berries",
-                ingredients: ["rolled oats", "almond milk", "banana", "walnuts", "cinnamon", "honey"],
-                baseCalories: 310,
-                tags: ["cardio", "diabetes", "inflammation", "cancer"],
-                prepTime: 5, cookTime: 5, totalTime: 10,
-                instructions: ["Cook oats.", "Top with fruit and nuts."],
-                nutrition: { protein: "10g", carbs: "48g", fat: "10g" }
-            },
-            {
-                name: "Avocado Toast with Tomato",
-                ingredients: ["bread", "avocado", "tomato", "lemon", "hemp seeds", "salt", "pepper"],
-                baseCalories: 340,
-                tags: ["cardio", "inflammation", "diabetes", "cancer"],
-                prepTime: 5, cookTime: 3, totalTime: 8,
-                instructions: ["Toast bread.", "Mash avo.", "Top with sliced tomato and seeds."],
-                nutrition: { protein: "10g", carbs: "35g", fat: "18g" }
-            },
-            {
-                name: "Green Anti-Inflammatory Smoothie",
-                ingredients: ["spinach", "banana", "apple", "cucumber", "ginger", "mint"],
-                baseCalories: 180,
-                tags: ["inflammation", "cancer", "cardio"],
-                prepTime: 10, cookTime: 0, totalTime: 10,
-                instructions: ["Blend all ingredients."],
-                nutrition: { protein: "4g", carbs: "38g", fat: "2g" }
-            },
-            {
-                name: "Breakfast Quinoa Bowl",
-                ingredients: ["quinoa", "almond milk", "berries", "almonds", "cinnamon"],
-                baseCalories: 320,
-                tags: ["cardio", "diabetes", "cancer"],
-                prepTime: 5, cookTime: 15, totalTime: 20,
-                instructions: ["Cook quinoa.", "Top with fruit/nuts."],
-                nutrition: { protein: "12g", carbs: "48g", fat: "10g" }
-            },
-            {
-                name: "Huevos Rancheros",
-                ingredients: ["eggs", "corn tortilla", "black beans", "salsa", "avocado", "cilantro"],
-                baseCalories: 380,
-                tags: ["inflammation", "diabetes"],
-                prepTime: 10, cookTime: 10, totalTime: 20,
-                instructions: ["Warm tortilla.", "Fry eggs.", "Top with beans, salsa, avo."],
-                nutrition: { protein: "18g", carbs: "32g", fat: "20g" }
-            },
-            {
-                name: "Egg and Kale Bowl",
-                ingredients: ["eggs", "sweet potato", "kale", "avocado", "olive oil"],
-                baseCalories: 360,
-                tags: ["inflammation", "diabetes"],
-                prepTime: 15, cookTime: 20, totalTime: 35,
-                instructions: ["Roast potato.", "Saute kale.", "Cook eggs.", "Assemble."],
-                nutrition: { protein: "20g", carbs: "28g", fat: "18g" }
-            },
-            {
-                name: "Breakfast Potato Hash",
-                ingredients: ["potatoes", "bell peppers", "onion", "eggs", "paprika", "olive oil"],
-                baseCalories: 350,
-                tags: ["inflammation", "diabetes"],
-                prepTime: 10, cookTime: 20, totalTime: 30,
-                instructions: ["Dice potatoes and peppers.", "Fry until crisp.", "Add eggs."],
-                nutrition: { protein: "14g", carbs: "40g", fat: "16g" }
-            }
+            { name: "Overnight Chia Pudding", ingredients: ["chia seeds", "almond milk", "berries", "honey", "vanilla extract"], baseCalories: 280, prepTime: 5, cookTime: 0, totalTime: 5, instructions: ["Mix chia seeds...", "Add honey...", "Refrigerate...", "Top with berries..."], nutrition: { protein: "8g", carbs: "35g", fat: "12g" }, tags: ["inflammation", "cardio", "cancer"] },
+            { name: "Greek Yogurt Parfait", ingredients: ["Greek yogurt", "granola", "berries", "honey", "almonds"], baseCalories: 320, prepTime: 5, cookTime: 0, totalTime: 5, instructions: ["Layer yogurt...", "Repeat...", "Top with almonds...", "Serve..."], nutrition: { protein: "22g", carbs: "35g", fat: "12g" }, tags: ["diabetes", "inflammation"] },
+            { name: "Berry Smoothie Bowl", ingredients: ["frozen berries", "banana", "Greek yogurt", "almond milk", "granola", "chia seeds", "honey"], baseCalories: 350, prepTime: 10, cookTime: 0, totalTime: 10, instructions: ["Blend...", "Pour...", "Top...", "Serve..."], nutrition: { protein: "18g", carbs: "52g", fat: "8g" }, tags: ["cancer", "inflammation"] },
+            { name: "Vegetable Omelette", ingredients: ["eggs", "spinach", "onion", "mushrooms", "cheese", "salt", "pepper", "butter"], baseCalories: 290, prepTime: 10, cookTime: 5, totalTime: 15, instructions: ["Whisk eggs...", "Heat butter...", "Sauté onion...", "Cook..."], nutrition: { protein: "22g", carbs: "6g", fat: "20g" }, tags: ["diabetes", "cardio"] },
+            { name: "Oatmeal with Nuts and Fruit", ingredients: ["rolled oats", "almond milk", "banana", "walnuts", "cinnamon", "honey"], baseCalories: 310, prepTime: 5, cookTime: 5, totalTime: 10, instructions: ["Combine oats...", "Cook...", "Transfer...", "Sprinkle..."], nutrition: { protein: "10g", carbs: "48g", fat: "10g" }, tags: ["cardio", "inflammation", "cancer"] },
+            { name: "Avocado Toast with Hemp Seeds", ingredients: ["bread", "avocado", "lemon", "hemp seeds", "salt", "pepper", "red pepper flakes"], baseCalories: 340, prepTime: 5, cookTime: 3, totalTime: 8, instructions: ["Toast bread...", "Mash avocado...", "Spread...", "Sprinkle..."], nutrition: { protein: "10g", carbs: "35g", fat: "18g" }, tags: ["cardio", "inflammation"] },
+            { name: "Green Smoothie", ingredients: ["spinach", "banana", "apple", "cucumber", "coconut water", "ginger", "mint"], baseCalories: 180, prepTime: 10, cookTime: 0, totalTime: 10, instructions: ["Add ingredients...", "Blend...", "Pour...", "Garnish..."], nutrition: { protein: "4g", carbs: "38g", fat: "2g" }, tags: ["inflammation", "cancer"] },
+            { name: "Protein Pancakes", ingredients: ["rolled oats", "banana", "protein powder", "almond milk", "blueberries", "maple syrup"], baseCalories: 380, prepTime: 10, cookTime: 10, totalTime: 20, instructions: ["Blend...", "Heat pan...", "Cook...", "Flip...", "Serve..."], nutrition: { protein: "25g", carbs: "52g", fat: "8g" }, tags: ["diabetes"] }, 
+            { name: "Breakfast Quinoa Bowl", ingredients: ["quinoa", "almond milk", "berries", "almonds", "cinnamon", "honey"], baseCalories: 320, prepTime: 5, cookTime: 15, totalTime: 20, instructions: ["Cook quinoa...", "Cool...", "Top...", "Serve..."], nutrition: { protein: "12g", carbs: "48g", fat: "10g" }, tags: ["cardio", "cancer"] },
+            { name: "Cottage Cheese Bowl", ingredients: ["cottage cheese", "berries", "cucumber", "hemp seeds", "honey", "mint"], baseCalories: 250, prepTime: 5, cookTime: 0, totalTime: 5, instructions: ["Place cheese...", "Top...", "Drizzle...", "Serve..."], nutrition: { protein: "20g", carbs: "20g", fat: "8g" }, tags: ["diabetes"] },
+            { name: "Chia Seed Pudding with Mango", ingredients: ["chia seeds", "coconut milk", "mango", "coconut flakes", "lime juice"], baseCalories: 300, prepTime: 5, cookTime: 0, totalTime: 5, instructions: ["Mix...", "Refrigerate...", "Top..."], nutrition: { protein: "6g", carbs: "32g", fat: "16g" }, tags: ["cancer", "inflammation"] },
+            { name: "Sweet Potato Toast", ingredients: ["sweet potato", "almond butter", "banana", "cinnamon", "chia seeds"], baseCalories: 280, prepTime: 10, cookTime: 15, totalTime: 25, instructions: ["Slice...", "Toast...", "Spread...", "Sprinkle..."], nutrition: { protein: "6g", carbs: "45g", fat: "8g" }, tags: ["cardio", "cancer"] },
+            { name: "Tofu Scramble", ingredients: ["firm tofu", "turmeric", "nutritional yeast", "spinach", "bell peppers", "onion"], baseCalories: 220, prepTime: 10, cookTime: 10, totalTime: 20, instructions: ["Crumble tofu...", "Add peppers...", "Stir spinach...", "Serve..."], nutrition: { protein: "18g", carbs: "12g", fat: "10g" }, tags: ["diabetes", "cardio", "cancer"] },
+            { name: "Overnight Oats with Apple", ingredients: ["rolled oats", "almond milk", "apple", "walnuts", "cinnamon", "maple syrup"], baseCalories: 330, prepTime: 5, cookTime: 0, totalTime: 5, instructions: ["Combine...", "Dice apple...", "Refrigerate..."], nutrition: { protein: "10g", carbs: "50g", fat: "10g" }, tags: ["cardio", "inflammation"] },
+            { name: "Egg and Veggie Breakfast Bowl", ingredients: ["eggs", "sweet potato", "kale", "avocado", "olive oil", "paprika"], baseCalories: 360, prepTime: 15, cookTime: 20, totalTime: 35, instructions: ["Roast potato...", "Sauté kale...", "Scramble eggs...", "Top..."], nutrition: { protein: "20g", carbs: "28g", fat: "18g" }, tags: ["diabetes", "inflammation"] }
         ];
         
         const lunchOptions = [
-            {
-                name: "Caprese Salad",
-                ingredients: ["tomatoes", "mozzarella balls", "basil", "balsamic glaze", "olive oil"],
-                baseCalories: 280,
-                tags: ["cardio", "diabetes", "inflammation"],
-                prepTime: 10, cookTime: 0, totalTime: 10,
-                instructions: ["Slice tomatoes.", "Combine with cheese and basil.", "Drizzle oil/balsamic."],
-                nutrition: { protein: "14g", carbs: "8g", fat: "20g" }
-            },
-            {
-                name: "Quinoa Salad with Cucumber",
-                ingredients: ["quinoa", "cucumber", "red onion", "feta cheese", "olives", "olive oil", "mint"],
-                baseCalories: 380,
-                tags: ["cardio", "diabetes", "cancer"],
-                prepTime: 15, cookTime: 15, totalTime: 30,
-                instructions: ["Cook quinoa.", "Chop veg.", "Mix."],
-                nutrition: { protein: "14g", carbs: "42g", fat: "18g" }
-            },
-            {
-                name: "Butternut Squash Soup",
-                ingredients: ["butternut squash", "carrots", "onion", "garlic", "vegetable broth", "ginger"],
-                baseCalories: 220,
-                tags: ["inflammation", "cancer", "cardio"],
-                prepTime: 15, cookTime: 30, totalTime: 45,
-                instructions: ["Saute veg.", "Simmer.", "Blend."],
-                nutrition: { protein: "4g", carbs: "28g", fat: "12g" }
-            },
-            {
-                name: "Turkey and Avocado Wrap",
-                ingredients: ["turkey slices", "avocado", "spinach", "tomato", "whole wheat tortilla", "hummus"],
-                baseCalories: 350,
-                tags: ["diabetes", "cardio"],
-                prepTime: 10, cookTime: 0, totalTime: 10,
-                instructions: ["Spread hummus.", "Layer turkey, avo, tomato.", "Roll."],
-                nutrition: { protein: "25g", carbs: "32g", fat: "15g" }
-            },
-            {
-                name: "Mediterranean Chickpea Salad",
-                ingredients: ["chickpeas", "cucumber", "tomatoes", "red onion", "feta cheese", "olive oil", "lemon"],
-                baseCalories: 310,
-                tags: ["cardio", "diabetes", "cancer", "inflammation"],
-                prepTime: 15, cookTime: 0, totalTime: 15,
-                instructions: ["Chop veg.", "Mix with chickpeas and dressing."],
-                nutrition: { protein: "12g", carbs: "35g", fat: "14g" }
-            },
-            {
-                name: "Cauliflower Rice Bowl",
-                ingredients: ["cauliflower rice", "chickpeas", "cucumber", "avocado", "tahini", "lemon"],
-                baseCalories: 340,
-                tags: ["cancer", "diabetes", "inflammation"],
-                prepTime: 15, cookTime: 5, totalTime: 20,
-                instructions: ["Saute cauli rice.", "Warm chickpeas.", "Assemble."],
-                nutrition: { protein: "14g", carbs: "38g", fat: "16g" }
-            },
-            {
-                name: "Chicken and Broccoli Salad",
-                ingredients: ["chicken breast", "broccoli", "red onion", "olive oil", "lemon"],
-                baseCalories: 320,
-                tags: ["cardio", "diabetes", "cancer"],
-                prepTime: 15, cookTime: 15, totalTime: 30,
-                instructions: ["Cook chicken.", "Steam broccoli.", "Toss with dressing."],
-                nutrition: { protein: "32g", carbs: "12g", fat: "16g" }
-            },
-            {
-                name: "Sweet Potato and Black Bean Bowl",
-                ingredients: ["sweet potato", "black beans", "avocado", "salsa", "lime", "cilantro"],
-                baseCalories: 380,
-                tags: ["cancer", "diabetes", "cardio", "inflammation"],
-                prepTime: 15, cookTime: 25, totalTime: 40,
-                instructions: ["Roast potato.", "Warm beans.", "Top with salsa."],
-                nutrition: { protein: "14g", carbs: "52g", fat: "14g" }
-            },
-            {
-                name: "Stuffed Bell Peppers",
-                ingredients: ["bell peppers", "ground turkey", "brown rice", "tomato sauce", "cheese"],
-                baseCalories: 350,
-                tags: ["diabetes", "cardio", "inflammation"],
-                prepTime: 20, cookTime: 30, totalTime: 50,
-                instructions: ["Hollow peppers.", "Mix meat/rice.", "Stuff.", "Bake with sauce."],
-                nutrition: { protein: "25g", carbs: "30g", fat: "12g" }
-            },
-            {
-                name: "Lentil and Vegetable Soup",
-                ingredients: ["lentils", "carrots", "celery", "onion", "tomatoes", "vegetable broth", "spinach"],
-                baseCalories: 240,
-                tags: ["cancer", "cardio", "diabetes", "inflammation"],
-                prepTime: 15, cookTime: 35, totalTime: 50,
-                instructions: ["Saute aromatics.", "Add tomatoes and lentils.", "Simmer."],
-                nutrition: { protein: "16g", carbs: "38g", fat: "2g" }
-            }
+            { name: "Zucchini Noodles with Pesto", ingredients: ["zucchini", "basil", "pine nuts", "parmesan cheese", "olive oil", "garlic", "salt", "pepper"], baseCalories: 320, prepTime: 15, cookTime: 5, totalTime: 20, instructions: ["Spiralize...", "Make pesto...", "Toss...", "Season...", "Serve..."], nutrition: { protein: "12g", carbs: "15g", fat: "28g" }, tags: ["diabetes", "inflammation"] },
+            { name: "Quinoa Salad with Cucumber", ingredients: ["quinoa", "cucumber", "red onion", "feta cheese", "olives", "lemon", "olive oil", "mint"], baseCalories: 380, prepTime: 15, cookTime: 15, totalTime: 30, instructions: ["Cook quinoa...", "Dice...", "Combine...", "Whisk...", "Toss..."], nutrition: { protein: "14g", carbs: "42g", fat: "18g" }, tags: ["cardio", "cancer"] },
+            { name: "Butternut Squash Soup", ingredients: ["butternut squash", "carrots", "onion", "garlic", "vegetable broth", "coconut milk", "ginger", "nutmeg"], baseCalories: 220, prepTime: 15, cookTime: 30, totalTime: 45, instructions: ["Peel...", "Sauté...", "Add...", "Simmer...", "Blend...", "Season..."], nutrition: { protein: "4g", carbs: "28g", fat: "12g" }, tags: ["cancer", "inflammation"] },
+            { name: "Turkey and Avocado Wrap", ingredients: ["turkey slices", "avocado", "spinach", "cucumber", "whole wheat tortilla", "hummus", "sprouts"], baseCalories: 350, prepTime: 10, cookTime: 0, totalTime: 10, instructions: ["Spread...", "Layer...", "Roll...", "Serve..."], nutrition: { protein: "25g", carbs: "32g", fat: "15g" }, tags: ["diabetes"] },
+            { name: "Mushroom and Lentil Salad", ingredients: ["lentils", "mushrooms", "cucumber", "red onion", "feta cheese", "olive oil", "lemon", "oregano"], baseCalories: 320, prepTime: 15, cookTime: 25, totalTime: 40, instructions: ["Cook lentils...", "Sauté mushrooms...", "Dice...", "Combine...", "Whisk...", "Toss..."], nutrition: { protein: "18g", carbs: "42g", fat: "10g" }, tags: ["cardio", "cancer", "diabetes"] },
+            { name: "Cauliflower Rice Bowl", ingredients: ["cauliflower rice", "chickpeas", "cucumber", "avocado", "tahini", "lemon", "parsley"], baseCalories: 340, prepTime: 15, cookTime: 5, totalTime: 20, instructions: ["Sauté rice...", "Dice...", "Warm chickpeas...", "Combine...", "Whisk...", "Drizzle..."], nutrition: { protein: "14g", carbs: "38g", fat: "16g" }, tags: ["cancer", "inflammation"] },
+            { name: "Vegetable Sushi Rolls", ingredients: ["sushi rice", "nori", "cucumber", "avocado", "carrot", "sesame seeds", "rice vinegar"], baseCalories: 280, prepTime: 30, cookTime: 20, totalTime: 50, instructions: ["Cook rice...", "Cut veg...", "Place nori...", "Roll...", "Slice...", "Serve..."], nutrition: { protein: "6g", carbs: "52g", fat: "6g" }, tags: ["cancer"] },
+            { name: "Chicken and Broccoli Salad", ingredients: ["chicken breast", "broccoli", "red onion", "olive oil", "lemon", "dill", "feta cheese"], baseCalories: 320, prepTime: 15, cookTime: 15, totalTime: 30, instructions: ["Cook chicken...", "Steam broccoli...", "Dice onion...", "Combine...", "Whisk...", "Toss..."], nutrition: { protein: "32g", carbs: "12g", fat: "16g" }, tags: ["diabetes", "cancer"] },
+            { name: "Sweet Potato and Black Bean Bowl", ingredients: ["sweet potato", "black beans", "avocado", "red onion", "lime", "cilantro", "olive oil"], baseCalories: 380, prepTime: 15, cookTime: 25, totalTime: 40, instructions: ["Cube potato...", "Warm beans...", "Dice...", "Combine...", "Top...", "Drizzle..."], nutrition: { protein: "14g", carbs: "52g", fat: "14g" }, tags: ["cardio", "cancer", "diabetes"] },
+            { name: "Egg Salad Lettuce Wraps", ingredients: ["eggs", "avocado", "celery", "red onion", "mayo", "mustard", "lettuce leaves", "lemon"], baseCalories: 290, prepTime: 15, cookTime: 10, totalTime: 25, instructions: ["Boil eggs...", "Dice...", "Mix...", "Add mayo...", "Spoon..."], nutrition: { protein: "14g", carbs: "8g", fat: "22g" }, tags: ["diabetes", "inflammation"] },
+            { name: "Mediterranean Chickpea Salad", ingredients: ["chickpeas", "cucumber", "tomatoes", "red onion", "feta cheese", "olive oil", "lemon", "oregano"], baseCalories: 310, prepTime: 15, cookTime: 0, totalTime: 15, instructions: ["Dice...", "Combine...", "Whisk...", "Toss..."], nutrition: { protein: "12g", carbs: "35g", fat: "14g" }, tags: ["cardio", "cancer"] },
+            { name: "Avocado and Quinoa Wrap", ingredients: ["quinoa", "avocado", "spinach", "cucumber", "whole wheat tortilla", "tahini", "lemon"], baseCalories: 360, prepTime: 15, cookTime: 0, totalTime: 15, instructions: ["Cook quinoa...", "Dice...", "Spread...", "Layer...", "Wrap..."], nutrition: { protein: "12g", carbs: "42g", fat: "16g" }, tags: ["cardio", "diabetes"] },
+            { name: "Lentil and Vegetable Soup", ingredients: ["lentils", "carrots", "celery", "onion", "garlic", "vegetable broth", "tomatoes", "spinach"], baseCalories: 240, prepTime: 15, cookTime: 35, totalTime: 50, instructions: ["Sauté...", "Add lentils...", "Simmer...", "Stir spinach...", "Season..."], nutrition: { protein: "16g", carbs: "38g", fat: "2g" }, tags: ["cancer", "cardio", "diabetes"] },
+            { name: "Tofu and Veggie Stir Fry", ingredients: ["firm tofu", "broccoli", "bell peppers", "carrots", "ginger", "garlic", "soy sauce", "sesame oil"], baseCalories: 280, prepTime: 15, cookTime: 15, totalTime: 30, instructions: ["Press tofu...", "Chop veg...", "Heat oil...", "Stir fry...", "Add ginger...", "Add tofu..."], nutrition: { protein: "20g", carbs: "18g", fat: "14g" }, tags: ["cancer", "diabetes", "inflammation"] },
+            { name: "Hummus and Veggie Bowl", ingredients: ["hummus", "cucumber", "bell peppers", "carrots", "cherry tomatoes", "olive oil", "lemon", "parsley"], baseCalories: 260, prepTime: 15, cookTime: 0, totalTime: 15, instructions: ["Dice...", "Halve tomatoes...", "Arrange...", "Drizzle...", "Garnish..."], nutrition: { protein: "8g", carbs: "28g", fat: "12g" }, tags: ["cardio", "cancer"] }
         ];
         
         const dinnerOptions = [
-            {
-                name: "Herb-Crusted Salmon with Broccoli",
-                ingredients: ["salmon fillets", "broccoli", "lemon", "olive oil", "dill", "garlic"],
-                baseCalories: 380,
-                tags: ["inflammation", "cardio", "cancer", "diabetes"],
-                prepTime: 10, cookTime: 15, totalTime: 25,
-                instructions: ["Coat salmon with herbs.", "Roast.", "Steam broccoli."],
-                nutrition: { protein: "34g", carbs: "8g", fat: "24g" }
-            },
-            {
-                name: "Chicken and Vegetable Stir Fry",
-                ingredients: ["chicken breast", "broccoli", "bell peppers", "snap peas", "ginger", "garlic", "sesame oil"],
-                baseCalories: 320,
-                tags: ["diabetes", "cardio", "cancer"],
-                prepTime: 15, cookTime: 10, totalTime: 25,
-                instructions: ["Cook chicken.", "Stir fry veg.", "Combine."],
-                nutrition: { protein: "32g", carbs: "18g", fat: "14g" }
-            },
-            {
-                name: "Eggplant Parmesan",
-                ingredients: ["eggplant", "marinara sauce", "mozzarella", "parmesan", "breadcrumbs", "basil"],
-                baseCalories: 380,
-                tags: ["cardio", "diabetes", "cancer"],
-                prepTime: 20, cookTime: 30, totalTime: 50,
-                instructions: ["Slice eggplant.", "Bread and bake.", "Layer with sauce/cheese.", "Bake."],
-                nutrition: { protein: "18g", carbs: "35g", fat: "18g" }
-            },
-            {
-                name: "Shrimp and Broccoli (No Cream)",
-                ingredients: ["shrimp", "broccoli", "garlic", "olive oil", "lemon", "parsley"],
-                baseCalories: 280,
-                tags: ["cardio", "diabetes", "inflammation"],
-                prepTime: 15, cookTime: 10, totalTime: 25,
-                instructions: ["Saute shrimp and garlic.", "Steam broccoli.", "Toss with lemon/oil."],
-                nutrition: { protein: "30g", carbs: "10g", fat: "12g" }
-            },
-            {
-                name: "Beef and Broccoli Stir Fry",
-                ingredients: ["beef strips", "broccoli", "bell peppers", "ginger", "garlic", "sesame oil"],
-                baseCalories: 360,
-                tags: ["diabetes"], // Limit red meat for cancer/cardio
-                prepTime: 15, cookTime: 10, totalTime: 25,
-                instructions: ["Sear beef.", "Stir fry veg.", "Combine."],
-                nutrition: { protein: "34g", carbs: "16g", fat: "18g" }
-            },
-            {
-                name: "Stuffed Zucchini Boats",
-                ingredients: ["zucchini", "quinoa", "black beans", "corn", "onion", "cumin", "cilantro"],
-                baseCalories: 320,
-                tags: ["cancer", "diabetes", "cardio", "inflammation"],
-                prepTime: 20, cookTime: 30, totalTime: 50,
-                instructions: ["Hollow zucchini.", "Mix cooked quinoa/beans.", "Stuff.", "Bake."],
-                nutrition: { protein: "16g", carbs: "48g", fat: "8g" }
-            },
-            {
-                name: "Cod with Lemon Butter Sauce",
-                ingredients: ["cod fillets", "lemon", "butter", "garlic", "parsley", "asparagus"],
-                baseCalories: 320,
-                tags: ["cardio", "diabetes", "inflammation"],
-                prepTime: 10, cookTime: 12, totalTime: 22,
-                instructions: ["Pan fry cod.", "Make sauce.", "Serve with asparagus."],
-                nutrition: { protein: "32g", carbs: "6g", fat: "18g" }
-            },
-            {
-                name: "Vegetable Curry with Potatoes",
-                ingredients: ["potatoes", "carrots", "cauliflower", "coconut milk", "curry powder", "ginger", "tomatoes"],
-                baseCalories: 340,
-                tags: ["inflammation", "cancer", "cardio"],
-                prepTime: 15, cookTime: 25, totalTime: 40,
-                instructions: ["Saute veg.", "Add tomatoes and spices.", "Simmer in coconut milk."],
-                nutrition: { protein: "8g", carbs: "45g", fat: "16g" }
-            },
-            {
-                name: "Lentil Bolognese",
-                ingredients: ["lentils", "carrots", "celery", "onion", "garlic", "marinara sauce", "spaghetti", "basil"],
-                baseCalories: 390,
-                tags: ["cancer", "cardio", "diabetes"],
-                prepTime: 15, cookTime: 35, totalTime: 50,
-                instructions: ["Cook lentils.", "Simmer in marinara.", "Serve over pasta."],
-                nutrition: { protein: "20g", carbs: "52g", fat: "6g" }
-            },
-            {
-                name: "Tofu and Vegetable Kebabs",
-                ingredients: ["firm tofu", "bell peppers", "onion", "olive oil", "ginger", "sesame seeds"],
-                baseCalories: 260,
-                tags: ["cancer", "diabetes", "cardio", "inflammation"],
-                prepTime: 20, cookTime: 15, totalTime: 35,
-                instructions: ["Cube tofu/veg.", "Marinate.", "Grill/Bake."],
-                nutrition: { protein: "18g", carbs: "16g", fat: "14g" }
-            }
+            { name: "Creamy Mushroom Risotto", ingredients: ["arborio rice", "mushrooms", "onion", "vegetable broth", "white wine", "parmesan cheese", "butter", "parsley"], baseCalories: 420, prepTime: 15, cookTime: 25, totalTime: 40, instructions: ["Heat broth...", "Sauté mushrooms...", "Sauté onion...", "Add rice...", "Add wine...", "Add broth...", "Stir..."], nutrition: { protein: "14g", carbs: "58g", fat: "14g" }, tags: ["inflammation"] },
+            { name: "Herb-Crusted Salmon with Broccoli", ingredients: ["salmon fillets", "broccoli", "lemon", "olive oil", "dill", "parsley", "garlic", "salt", "pepper"], baseCalories: 380, prepTime: 10, cookTime: 15, totalTime: 25, instructions: ["Preheat...", "Mix herbs...", "Coat salmon...", "Roast...", "Steam broccoli...", "Serve..."], nutrition: { protein: "34g", carbs: "8g", fat: "24g" }, tags: ["inflammation", "cardio", "diabetes"] },
+            { name: "Chicken and Vegetable Stir Fry", ingredients: ["chicken breast", "broccoli", "carrots", "snap peas", "ginger", "garlic", "soy sauce", "sesame oil"], baseCalories: 320, prepTime: 15, cookTime: 10, totalTime: 25, instructions: ["Slice chicken...", "Chop veg...", "Heat oil...", "Cook chicken...", "Stir fry veg...", "Add aromatics...", "Combine..."], nutrition: { protein: "32g", carbs: "18g", fat: "14g" }, tags: ["diabetes", "cancer"] },
+            { name: "Lemon Herb Chicken with Asparagus", ingredients: ["chicken breast", "asparagus", "lemon", "olive oil", "thyme", "rosemary", "garlic", "salt", "pepper"], baseCalories: 340, prepTime: 10, cookTime: 20, totalTime: 30, instructions: ["Preheat...", "Season...", "Roast...", "Add asparagus...", "Finish..."], nutrition: { protein: "38g", carbs: "8g", fat: "16g" }, tags: ["diabetes", "cardio"] },
+            { name: "Shrimp and Broccoli Alfredo", ingredients: ["shrimp", "fettuccine", "broccoli", "heavy cream", "garlic", "butter", "parmesan cheese", "parsley"], baseCalories: 480, prepTime: 15, cookTime: 15, totalTime: 30, instructions: ["Cook pasta...", "Steam broccoli...", "Melt butter...", "Cook shrimp...", "Make sauce...", "Combine..."], nutrition: { protein: "32g", carbs: "42g", fat: "22g" }, tags: [] }, // Indulgent option
+            { name: "Beef and Broccoli Stir Fry", ingredients: ["beef strips", "broccoli", "carrots", "ginger", "garlic", "soy sauce", "sesame oil", "green onions"], baseCalories: 360, prepTime: 15, cookTime: 10, totalTime: 25, instructions: ["Heat oil...", "Brown beef...", "Stir fry veg...", "Add aromatics...", "Combine...", "Garnish..."], nutrition: { protein: "34g", carbs: "16g", fat: "18g" }, tags: ["diabetes"] },
+            { name: "Stuffed Bell Peppers", ingredients: ["bell peppers", "quinoa", "black beans", "corn", "onion", "cheese", "cumin", "cilantro"], baseCalories: 320, prepTime: 20, cookTime: 30, totalTime: 50, instructions: ["Preheat...", "Prep peppers...", "Cook quinoa...", "Make filling...", "Stuff...", "Bake..."], nutrition: { protein: "16g", carbs: "48g", fat: "8g" }, tags: ["cardio", "diabetes", "cancer"] },
+            { name: "Zucchini Lasagna", ingredients: ["zucchini", "ricotta", "spinach", "marinara sauce", "mozzarella", "basil", "oregano"], baseCalories: 340, prepTime: 20, cookTime: 40, totalTime: 60, instructions: ["Preheat...", "Slice zucchini...", "Mix ricotta...", "Layer...", "Bake..."], nutrition: { protein: "22g", carbs: "24g", fat: "18g" }, tags: ["diabetes", "cancer"] },
+            { name: "Cod with Lemon Butter Sauce", ingredients: ["cod fillets", "lemon", "butter", "garlic", "parsley", "asparagus", "salt", "pepper"], baseCalories: 320, prepTime: 10, cookTime: 12, totalTime: 22, instructions: ["Season...", "Cook cod...", "Remove...", "Make sauce...", "Serve..."], nutrition: { protein: "32g", carbs: "6g", fat: "18g" }, tags: ["cardio", "inflammation"] },
+            { name: "Vegetable Curry with Cauliflower Rice", ingredients: ["cauliflower", "carrots", "zucchini", "coconut milk", "curry powder", "ginger", "garlic", "cilantro"], baseCalories: 280, prepTime: 15, cookTime: 20, totalTime: 35, instructions: ["Chop...", "Sauté aromatics...", "Add curry...", "Cook veg...", "Simmer...", "Serve..."], nutrition: { protein: "6g", carbs: "22g", fat: "20g" }, tags: ["inflammation", "cancer"] },
+            { name: "Lentil Bolognese", ingredients: ["lentils", "carrots", "celery", "onion", "garlic", "tomato paste", "vegetable broth", "spaghetti", "basil"], baseCalories: 390, prepTime: 15, cookTime: 35, totalTime: 50, instructions: ["Sauté...", "Add liquids...", "Simmer...", "Cook pasta...", "Serve..."], nutrition: { protein: "20g", carbs: "52g", fat: "6g" }, tags: ["cancer", "cardio"] },
+            { name: "Stuffed Portobello Mushrooms", ingredients: ["portobello mushrooms", "quinoa", "spinach", "feta cheese", "garlic", "olive oil", "lemon"], baseCalories: 280, prepTime: 15, cookTime: 20, totalTime: 35, instructions: ["Prep mushrooms...", "Cook quinoa...", "Sauté spinach...", "Mix...", "Stuff...", "Bake..."], nutrition: { protein: "14g", carbs: "28g", fat: "12g" }, tags: ["cancer", "diabetes"] },
+            { name: "Vegetable Paella", ingredients: ["arborio rice", "bell peppers", "zucchini", "artichokes", "peas", "saffron", "vegetable broth", "lemon"], baseCalories: 360, prepTime: 15, cookTime: 25, totalTime: 40, instructions: ["Sauté veg...", "Add rice...", "Add broth...", "Add artichokes...", "Serve..."], nutrition: { protein: "10g", carbs: "58g", fat: "8g" }, tags: ["cancer"] },
+            { name: "Tofu and Vegetable Kebabs", ingredients: ["firm tofu", "bell peppers", "zucchini", "onion", "olive oil", "soy sauce", "ginger", "sesame seeds"], baseCalories: 260, prepTime: 20, cookTime: 15, totalTime: 35, instructions: ["Cube...", "Whisk marinade...", "Thread...", "Grill...", "Sprinkle..."], nutrition: { protein: "18g", carbs: "16g", fat: "14g" }, tags: ["cancer", "diabetes"] },
+            { name: "Eggplant Parmesan", ingredients: ["eggplant", "marinara sauce", "mozzarella cheese", "parmesan cheese", "breadcrumbs", "basil", "oregano"], baseCalories: 380, prepTime: 20, cookTime: 35, totalTime: 55, instructions: ["Slice...", "Dredge...", "Layer...", "Bake...", "Garnish..."], nutrition: { protein: "20g", carbs: "32g", fat: "18g" }, tags: ["cancer"] }
         ];
 
-        // Days of the week
+        // Days of the week and Units (Same as before)
         const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         let currentPlan = {};
         
+        // Simplified units object (copy from previous)
+        const ingredientUnits = { "zucchini": "medium", "basil": "cup", "pine nuts": "tbsp", "garlic": "clove", "broccoli": "head", "asparagus": "bunch", "spinach": "cup", "cucumber": "medium", "red onion": "medium", "lemon": "medium", "carrots": "large", "snap peas": "cup", "ginger": "tbsp", "butternut squash": "medium", "avocado": "medium", "banana": "medium", "berries": "cup", "mushrooms": "cup", "onion": "medium", "green onions": "bunch", "mint": "tbsp", "thyme": "tsp", "rosemary": "tsp", "dill": "tbsp", "parsley": "tbsp", "sprouts": "cup", "cauliflower": "head", "sweet potato": "medium", "celery": "stalk", "corn": "cup", "bell peppers": "medium", "apple": "medium", "lime": "medium", "lettuce leaves": "cup", "cilantro": "tbsp", "frozen berries": "cup", "mango": "medium", "coconut flakes": "tbsp", "lime juice": "tbsp", "almond butter": "tbsp", "chia seeds": "tbsp", "kale": "cup", "paprika": "tsp", "tomatoes": "medium", "cherry tomatoes": "cup", "artichokes": "can", "peas": "cup", "saffron": "pinch", "portobello mushrooms": "large", "eggplant": "medium", "parmesan cheese": "cup", "butter": "tbsp", "Greek yogurt": "cup", "heavy cream": "cup", "feta cheese": "cup", "cheese": "cup", "mozzarella": "cup", "ricotta": "cup", "cottage cheese": "cup", "mayo": "tbsp", "mustard": "tsp", "nutritional yeast": "tbsp", "salmon fillets": "fillet", "chicken breast": "breast", "shrimp": "lb", "turkey slices": "oz", "beef strips": "lb", "cod fillets": "fillet", "eggs": "large", "firm tofu": "block", "almond milk": "cup", "honey": "tbsp", "vanilla extract": "tsp", "granola": "cup", "almonds": "tbsp", "hummus": "tbsp", "rolled oats": "cup", "walnuts": "tbsp", "cinnamon": "tsp", "hemp seeds": "tbsp", "red pepper flakes": "tsp", "protein powder": "scoop", "coconut water": "cup", "nori": "sheet", "rice vinegar": "tbsp", "quinoa": "cup", "black beans": "can", "marinara sauce": "cup", "oregano": "tsp", "cumin": "tsp", "curry powder": "tbsp", "tahini": "tbsp", "maple syrup": "tbsp", "arborio rice": "cup", "vegetable broth": "cup", "white wine": "cup", "soy sauce": "tbsp", "sesame oil": "tsp", "coconut milk": "can", "nutmeg": "tsp", "blueberries": "cup", "breadcrumbs": "cup", "turmeric": "tsp", "tomato paste": "tbsp", "spaghetti": "oz", "sesame seeds": "tbsp", "bread": "slice", "whole wheat tortilla": "tortilla", "sushi rice": "cup", "fettuccine": "oz" };
+
+        // Handle Goal Selection UI
+        document.querySelectorAll('input[name="healthGoal"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const goal = e.target.value;
+                document.getElementById('goalDescription').textContent = goalDescriptions[goal];
+                document.getElementById('nutritionInfoText').innerHTML = goalInfoText[goal];
+                generateMealPlan(); // Auto-regenerate on selection
+            });
+        });
+
+        // Filter Meals based on Tag
+        function getFilteredMeals(allMeals, goal) {
+            // First, try to find meals with the specific tag
+            const preferred = allMeals.filter(meal => meal.tags && meal.tags.includes(goal));
+            // If we don't have enough preferred meals, mix in general healthy ones
+            if (preferred.length < 3) return allMeals; 
+            return preferred;
+        }
+
         // Generate meal plan
         function generateMealPlan() {
-            const healthConcern = document.getElementById('healthConcern').value;
             const mealPlanContainer = document.getElementById('mealPlanContainer');
-            
-            if (!healthConcern) {
-                alert("Please select a Health Concern first.");
-                return;
-            }
-
             mealPlanContainer.innerHTML = '';
             currentPlan = {};
             
             let totalCalories = 0;
             const dailyTarget = parseInt(document.getElementById('calorieTarget').value) || 2000;
+            const selectedGoal = document.querySelector('input[name="healthGoal"]:checked').value;
             
-            // Filter options based on health concern
-            const filterMeals = (options) => {
-                const filtered = options.filter(meal => meal.tags.includes(healthConcern));
-                return filtered.length > 0 ? filtered : options; // Fallback if no specific tags
-            };
-
-            const filteredBreakfast = filterMeals(breakfastOptions);
-            const filteredLunch = filterMeals(lunchOptions);
-            const filteredDinner = filterMeals(dinnerOptions);
-
-            const planLabel = document.getElementById('planLabel');
-            const labels = {
-                'inflammation': 'Anti-Inflammatory Focus',
-                'diabetes': 'Diabetes Friendly',
-                'cardio': 'Heart Healthy',
-                'cancer': 'Cancer Risk Reduction'
-            };
-            planLabel.textContent = labels[healthConcern] || '';
+            // Get filtered lists based on goal
+            const filteredBreakfast = getFilteredMeals(breakfastOptions, selectedGoal);
+            const filteredLunch = getFilteredMeals(lunchOptions, selectedGoal);
+            const filteredDinner = getFilteredMeals(dinnerOptions, selectedGoal);
 
             days.forEach(day => {
+                // Select random meals from filtered lists
                 const breakfast = filteredBreakfast[Math.floor(Math.random() * filteredBreakfast.length)];
                 const lunch = filteredLunch[Math.floor(Math.random() * filteredLunch.length)];
                 const dinner = filteredDinner[Math.floor(Math.random() * filteredDinner.length)];
                 
-                // Adjust portions (internal calculation only, no reporting)
-                const breakfastAdj = adjustMealPortions(breakfast, calculatePortionAdjustment(breakfast.baseCalories, dailyTarget * 0.25));
-                const lunchAdj = adjustMealPortions(lunch, calculatePortionAdjustment(lunch.baseCalories, dailyTarget * 0.35));
-                const dinnerAdj = adjustMealPortions(dinner, calculatePortionAdjustment(dinner.baseCalories, dailyTarget * 0.40));
+                // Adjust portions
+                const breakfastAdjustment = calculatePortionAdjustment(breakfast.baseCalories, dailyTarget * 0.25);
+                const lunchAdjustment = calculatePortionAdjustment(lunch.baseCalories, dailyTarget * 0.35);
+                const dinnerAdjustment = calculatePortionAdjustment(dinner.baseCalories, dailyTarget * 0.40);
                 
-                currentPlan[day] = { breakfast: breakfastAdj, lunch: lunchAdj, dinner: dinnerAdj };
-                totalCalories += breakfastAdj.calories + lunchAdj.calories + dinnerAdj.calories;
+                const adjustedBreakfast = adjustMealPortions(breakfast, breakfastAdjustment);
+                const adjustedLunch = adjustMealPortions(lunch, lunchAdjustment);
+                const adjustedDinner = adjustMealPortions(dinner, dinnerAdjustment);
                 
+                currentPlan[day] = { breakfast: adjustedBreakfast, lunch: adjustedLunch, dinner: adjustedDinner };
+                totalCalories += adjustedBreakfast.calories + adjustedLunch.calories + adjustedDinner.calories;
+                
+                // Create UI
                 const dayCard = document.createElement('div');
                 dayCard.className = 'day-card';
-                const dayCalories = breakfastAdj.calories + lunchAdj.calories + dinnerAdj.calories;
+                const date = new Date(); date.setDate(date.getDate() + days.indexOf(day));
+                const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const dayCalories = adjustedBreakfast.calories + adjustedLunch.calories + adjustedDinner.calories;
                 
+                // Helper to render a meal block
+                const renderMeal = (type, meal, icon) => `
+                    <div class="meal" data-day="${day}" data-meal="${type.toLowerCase()}">
+                        <div class="meal-type"><i class="${icon}"></i> <strong>${type}</strong></div>
+                        <div class="meal-name">${meal.name}</div>
+                        ${meal.tags.includes(selectedGoal) ? `<div class="evidence-badge"><i class="fas fa-check-circle"></i> Recommended for ${selectedGoal}</div>` : ''}
+                        <div class="meal-ingredients">${formatIngredients(meal.ingredients)}</div>
+                        <div class="meal-calories"><i class="fas fa-fire"></i> ${meal.calories} calories</div>
+                        <div class="meal-actions">
+                            <button class="action-btn swap-btn" title="Swap Meal"><i class="fas fa-sync-alt"></i></button>
+                            <button class="action-btn recipe-btn" title="View Recipe"><i class="fas fa-book-open"></i></button>
+                            <button class="action-btn nutrition-btn" title="View Nutrition"><i class="fas fa-apple-alt"></i></button>
+                        </div>
+                        <div class="meal-options"></div>
+                    </div>`;
+
                 dayCard.innerHTML = `
                     <div class="day-header">
                         <div class="day-name">${day}</div>
-                        <div class="day-calories">${dayCalories} cal</div>
+                        <div class="day-info"><div class="day-date">${formattedDate}</div><div class="day-calories">${dayCalories} cal</div></div>
                     </div>
-                    ${createMealHTML(day, 'breakfast', breakfastAdj)}
-                    ${createMealHTML(day, 'lunch', lunchAdj)}
-                    ${createMealHTML(day, 'dinner', dinnerAdj)}
+                    ${renderMeal('Breakfast', adjustedBreakfast, 'fas fa-sun')}
+                    ${renderMeal('Lunch', adjustedLunch, 'fas fa-cloud-sun')}
+                    ${renderMeal('Dinner', adjustedDinner, 'fas fa-moon')}
                 `;
                 mealPlanContainer.appendChild(dayCard);
             });
             
+            attachEventListeners();
             document.getElementById('totalCalories').textContent = Math.round(totalCalories);
             generateShoppingList();
-            attachEventListeners();
         }
 
-        function createMealHTML(day, type, meal) {
-            const icons = { breakfast: 'fa-sun', lunch: 'fa-cloud-sun', dinner: 'fa-moon' };
-            const titles = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner' };
-            
-            return `
-                <div class="meal" data-day="${day}" data-meal="${type}">
-                    <div class="meal-type"><i class="fas ${icons[type]}"></i> <strong>${titles[type]}</strong></div>
-                    <div class="meal-name">${meal.name}</div>
-                    <div class="meal-ingredients">${formatIngredients(meal.ingredients)}</div>
-                    <div class="meal-calories"><i class="fas fa-fire"></i> ${meal.calories} calories</div>
-                    <div class="meal-actions">
-                        <button class="action-btn swap-btn" title="Swap Meal"><i class="fas fa-sync-alt"></i></button>
-                        <button class="action-btn recipe-btn" title="View Recipe"><i class="fas fa-book-open"></i></button>
-                        <button class="action-btn nutrition-btn" title="View Nutrition"><i class="fas fa-apple-alt"></i></button>
-                    </div>
-                    <div class="meal-options"></div>
-                </div>
-            `;
-        }
-
+        // Basic Helpers (Ported from original)
         function calculatePortionAdjustment(base, target) { return target / base; }
-
-        function adjustMealPortions(meal, adjustment) {
-            const adjusted = { ...meal };
-            adjusted.calories = Math.round(meal.baseCalories * adjustment);
-            adjusted.ingredients = [...meal.ingredients];
-            return adjusted;
-        }
-
-        function formatIngredients(ingredients) {
-            return ingredients.map(i => `<span class="ingredient-highlight">${i}</span>`).join(', ');
-        }
+        function adjustMealPortions(meal, adjustment) { return { ...meal, calories: Math.round(meal.baseCalories * adjustment), adjustment: adjustment, ingredients: [...meal.ingredients] }; }
+        function formatIngredients(ingredients) { return ingredients.map(i => `<span class="ingredient-highlight">${i}</span>`).join(', '); }
         
+        // Event Listeners
         function attachEventListeners() {
-            document.querySelectorAll('.swap-btn').forEach(btn => {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    const mealDiv = btn.closest('.meal');
-                    showMealOptions(mealDiv, mealDiv.dataset.day, mealDiv.dataset.meal);
-                };
-            });
-            document.querySelectorAll('.recipe-btn').forEach(btn => {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    const d = btn.closest('.meal');
-                    showRecipe(d.dataset.day, d.dataset.meal);
-                };
-            });
-            document.querySelectorAll('.nutrition-btn').forEach(btn => {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    const d = btn.closest('.meal');
-                    showNutrition(d.dataset.day, d.dataset.meal);
-                };
-            });
+            document.querySelectorAll('.swap-btn').forEach(btn => btn.addEventListener('click', function(e) { e.stopPropagation(); showMealOptions(this.closest('.meal'), this.closest('.meal').dataset.day, this.closest('.meal').dataset.meal); }));
+            document.querySelectorAll('.recipe-btn').forEach(btn => btn.addEventListener('click', function(e) { e.stopPropagation(); showRecipe(this.closest('.meal').dataset.day, this.closest('.meal').dataset.meal); }));
+            document.querySelectorAll('.nutrition-btn').forEach(btn => btn.addEventListener('click', function(e) { e.stopPropagation(); showNutrition(this.closest('.meal').dataset.day, this.closest('.meal').dataset.meal); }));
         }
 
+        // Meal Swapping Logic
         function showMealOptions(mealDiv, day, mealType) {
-            const healthConcern = document.getElementById('healthConcern').value;
-            const container = mealDiv.querySelector('.meal-options');
-            container.innerHTML = '';
-            container.style.display = 'block';
+            const optionsContainer = mealDiv.querySelector('.meal-options');
+            optionsContainer.innerHTML = ''; optionsContainer.style.display = 'block';
             
-            let source = (mealType === 'breakfast') ? breakfastOptions : (mealType === 'lunch' ? lunchOptions : dinnerOptions);
-            source = source.filter(m => m.tags.includes(healthConcern));
-
-            source.forEach(opt => {
-                if(opt.name === currentPlan[day][mealType].name) return;
-                const div = document.createElement('div');
-                div.className = 'meal-option';
-                div.textContent = opt.name;
-                div.onclick = () => {
-                    swapMeal(day, mealType, opt);
-                    container.style.display = 'none';
-                };
-                container.appendChild(div);
+            const selectedGoal = document.querySelector('input[name="healthGoal"]:checked').value;
+            let options = mealType === 'breakfast' ? breakfastOptions : mealType === 'lunch' ? lunchOptions : dinnerOptions;
+            
+            // Sort options: goal-compliant meals first
+            options.sort((a, b) => {
+                const aMatch = a.tags && a.tags.includes(selectedGoal);
+                const bMatch = b.tags && b.tags.includes(selectedGoal);
+                return bMatch - aMatch;
             });
-            
-            const close = (e) => {
-                if(!mealDiv.contains(e.target)) {
-                    container.style.display = 'none';
-                    document.removeEventListener('click', close);
-                }
-            };
-            setTimeout(() => document.addEventListener('click', close), 10);
+
+            options.forEach(option => {
+                if (option.name === currentPlan[day][mealType].name) return;
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'meal-option';
+                optionDiv.innerHTML = `${option.name} ${option.tags.includes(selectedGoal) ? '<i class="fas fa-star" style="color:var(--warning); font-size:0.8em;"></i>' : ''}`;
+                optionDiv.addEventListener('click', () => { swapMeal(day, mealType, option); optionsContainer.style.display = 'none'; });
+                optionsContainer.appendChild(optionDiv);
+            });
+            document.addEventListener('click', function closeOptions(e) { if (!mealDiv.contains(e.target)) { optionsContainer.style.display = 'none'; document.removeEventListener('click', closeOptions); } });
         }
 
         function swapMeal(day, mealType, newMeal) {
-            const target = parseInt(document.getElementById('calorieTarget').value) || 2000;
-            let factor = 0.35; 
-            if(mealType === 'breakfast') factor = 0.25;
-            if(mealType === 'dinner') factor = 0.40;
+            const dailyTarget = parseInt(document.getElementById('calorieTarget').value) || 2000;
+            let ratio = mealType === 'breakfast' ? 0.25 : mealType === 'lunch' ? 0.35 : 0.40;
+            const adjusted = adjustMealPortions(newMeal, calculatePortionAdjustment(newMeal.baseCalories, dailyTarget * ratio));
+            currentPlan[day][mealType] = adjusted;
             
-            const adjMeal = adjustMealPortions(newMeal, calculatePortionAdjustment(newMeal.baseCalories, target * factor));
-            currentPlan[day][mealType] = adjMeal;
+            const mealDiv = document.querySelector(`.meal[data-day="${day}"][data-meal="${mealType}"]`);
+            mealDiv.querySelector('.meal-name').textContent = adjusted.name;
+            mealDiv.querySelector('.meal-ingredients').innerHTML = formatIngredients(adjusted.ingredients);
+            mealDiv.querySelector('.meal-calories').innerHTML = `<i class="fas fa-fire"></i> ${adjusted.calories} calories`;
             
-            const div = document.querySelector(`.meal[data-day="${day}"][data-meal="${mealType}"]`);
-            div.outerHTML = createMealHTML(day, mealType, adjMeal);
+            // Update badge
+            const selectedGoal = document.querySelector('input[name="healthGoal"]:checked').value;
+            const existingBadge = mealDiv.querySelector('.evidence-badge');
+            if(existingBadge) existingBadge.remove();
+            
+            if(newMeal.tags.includes(selectedGoal)) {
+                 const badge = document.createElement('div');
+                 badge.className = 'evidence-badge';
+                 badge.innerHTML = `<i class="fas fa-check-circle"></i> Recommended for ${selectedGoal}`;
+                 mealDiv.querySelector('.meal-name').after(badge);
+            }
+
             generateShoppingList();
-            attachEventListeners();
         }
 
-        // --- Recipe & Nutrition Modals (Simplified Logic) ---
+        // Modals
         function showRecipe(day, type) {
             const meal = currentPlan[day][type];
             document.getElementById('recipeTitle').textContent = meal.name;
-            document.getElementById('prepTime').textContent = meal.prepTime;
-            document.getElementById('cookTime').textContent = meal.cookTime;
-            document.getElementById('totalTime').textContent = meal.totalTime;
-            
-            const ingList = document.getElementById('ingredientsList');
-            ingList.innerHTML = meal.ingredients.map(i => `<li>${i}</li>`).join('');
-            
-            const insList = document.getElementById('instructionsList');
-            insList.innerHTML = meal.instructions.map(i => `<li>${i}</li>`).join('');
-            
+            document.getElementById('prepTime').textContent = meal.prepTime; document.getElementById('cookTime').textContent = meal.cookTime; document.getElementById('totalTime').textContent = meal.totalTime;
+            document.getElementById('ingredientsList').innerHTML = meal.ingredients.map(i => `<li>${i}</li>`).join('');
+            document.getElementById('instructionsList').innerHTML = meal.instructions.map(i => `<li>${i}</li>`).join('');
             document.getElementById('recipeModal').style.display = 'flex';
         }
-
         function showNutrition(day, type) {
             const meal = currentPlan[day][type];
-            document.getElementById('nutritionTitle').textContent = meal.name;
-            document.getElementById('calories').textContent = meal.calories;
-            document.getElementById('protein').textContent = meal.nutrition.protein;
-            document.getElementById('carbs').textContent = meal.nutrition.carbs;
-            document.getElementById('fat').textContent = meal.nutrition.fat;
+            document.getElementById('nutritionTitle').textContent = `${meal.name} - Nutrition`;
+            document.getElementById('calories').textContent = meal.calories; document.getElementById('protein').textContent = meal.nutrition.protein; document.getElementById('carbs').textContent = meal.nutrition.carbs; document.getElementById('fat').textContent = meal.nutrition.fat;
             document.getElementById('nutritionModal').style.display = 'flex';
         }
+        function closeRecipeModal() { document.getElementById('recipeModal').style.display = 'none'; }
+        function closeNutritionModal() { document.getElementById('nutritionModal').style.display = 'none'; }
 
-        // --- Shopping List Logic ---
+        // Shopping List & Print (Same as before)
         function generateShoppingList() {
-            const container = document.getElementById('shoppingListContainer');
-            container.innerHTML = '';
+            const container = document.getElementById('shoppingListContainer'); container.innerHTML = '';
+            const allIngredients = [];
+            for (const d in currentPlan) { allIngredients.push(...currentPlan[d].breakfast.ingredients, ...currentPlan[d].lunch.ingredients, ...currentPlan[d].dinner.ingredients); }
+            const counts = {}; allIngredients.forEach(i => counts[i] = (counts[i] || 0) + 1);
             
-            const allIng = [];
-            Object.values(currentPlan).forEach(day => {
-                allIng.push(...day.breakfast.ingredients, ...day.lunch.ingredients, ...day.dinner.ingredients);
-            });
-            
-            const counts = {};
-            allIng.forEach(i => counts[i] = (counts[i] || 0) + 1);
-            
-            // Simplified categories for demo
-            const cats = { "Produce": [], "Pantry": [], "Proteins": [], "Dairy": [] };
-            const produceList = ["zucchini", "spinach", "cucumber", "onion", "broccoli", "carrot", "banana", "berry", "apple", "lemon", "lime", "avocado", "kale", "squash", "mushroom", "pepper", "asparagus", "cilantro", "basil", "mint", "ginger", "garlic", "thyme", "dill", "parsley", "tomato", "potato", "eggplant", "lettuce"];
-            
-            Object.keys(counts).sort().forEach(item => {
-                let cat = "Pantry";
-                if(produceList.some(p => item.toLowerCase().includes(p))) cat = "Produce";
-                else if(["chicken", "beef", "salmon", "shrimp", "cod", "tofu", "turkey", "egg"].some(p => item.toLowerCase().includes(p))) cat = "Proteins";
-                else if(["cheese", "yogurt", "milk", "butter", "cream", "mozzarella", "parmesan"].some(p => item.toLowerCase().includes(p))) cat = "Dairy";
-                
-                cats[cat].push({name: item, count: counts[item]});
-            });
+            const categories = {
+                "Produce": ["zucchini", "basil", "garlic", "broccoli", "asparagus", "spinach", "cucumber", "red onion", "lemon", "carrots", "snap peas", "ginger", "butternut squash", "avocado", "banana", "berries", "mushrooms", "onion", "green onions", "mint", "thyme", "rosemary", "dill", "parsley", "sprouts", "cauliflower", "sweet potato", "celery", "corn", "bell peppers", "apple", "lime", "lettuce leaves", "cilantro", "frozen berries", "mango", "coconut flakes", "lime juice", "almond butter", "chia seeds", "kale", "paprika", "tomatoes", "cherry tomatoes", "artichokes", "peas", "saffron", "portobello mushrooms", "eggplant"],
+                "Dairy": ["parmesan cheese", "butter", "Greek yogurt", "heavy cream", "feta cheese", "cheese", "mozzarella", "ricotta", "cottage cheese", "mayo", "mustard", "nutritional yeast"],
+                "Meat & Seafood": ["salmon fillets", "chicken breast", "shrimp", "turkey slices", "beef strips", "cod fillets", "eggs", "firm tofu"],
+                "Pantry": ["chia seeds", "almond milk", "honey", "vanilla extract", "granola", "almonds", "hummus", "rolled oats", "walnuts", "cinnamon", "hemp seeds", "red pepper flakes", "protein powder", "coconut water", "nori", "rice vinegar", "quinoa", "black beans", "marinara sauce", "oregano", "cumin", "curry powder", "tahini", "maple syrup", "arborio rice", "vegetable broth", "white wine", "soy sauce", "sesame oil", "coconut milk", "nutmeg", "blueberries", "breadcrumbs", "turmeric", "tomato paste", "spaghetti", "sesame seeds"],
+                "Bakery": ["bread", "whole wheat tortilla", "sushi rice", "fettuccine"]
+            };
 
             let totalItems = 0;
-            for(const [cat, items] of Object.entries(cats)) {
-                if(items.length === 0) continue;
-                const catDiv = document.createElement('div');
-                catDiv.className = 'category';
-                catDiv.innerHTML = `<i class="fas fa-chevron-right"></i> ${cat}`;
-                container.appendChild(catDiv);
-                
-                const ul = document.createElement('ul');
-                ul.className = 'shopping-items';
-                items.forEach(i => {
-                    totalItems++;
-                    ul.innerHTML += `
-                        <li class="shopping-item">
-                            <input type="checkbox" id="shop-${i.name}">
-                            <label for="shop-${i.name}">${i.name} <span class="unit">(x${i.count})</span></label>
-                        </li>`;
-                });
-                container.appendChild(ul);
-            }
-            
-            document.getElementById('shoppingItems').textContent = totalItems;
-            document.getElementById('totalIngredients').textContent = Object.keys(counts).length;
-            
-            // Re-attach checkbox listeners
-            document.querySelectorAll('.shopping-item input').forEach(box => {
-                box.onchange = function() {
-                    this.parentElement.classList.toggle('checked', this.checked);
+            for (const cat in categories) {
+                const items = [];
+                categories[cat].forEach(ing => { if (counts[ing]) { items.push({name: ing, count: counts[ing], unit: ingredientUnits[ing] || "unit"}); totalItems++; } });
+                if (items.length) {
+                    const catDiv = document.createElement('div'); catDiv.className = 'category'; catDiv.innerHTML = `<i class="fas fa-folder"></i> ${cat}`; container.appendChild(catDiv);
+                    const ul = document.createElement('ul'); ul.className = 'shopping-items';
+                    items.forEach(item => {
+                        const li = document.createElement('li'); li.className = 'shopping-item';
+                        li.innerHTML = `<input type="checkbox" id="${item.name}"><label for="${item.name}">${item.name} <span class="unit">(${item.count} ${item.unit}${item.count>1 && !item.unit.endsWith('s')?'s':''})</span></label>`;
+                        li.querySelector('input').addEventListener('change', function() { this.checked ? li.classList.add('checked') : li.classList.remove('checked'); });
+                        ul.appendChild(li);
+                    });
+                    container.appendChild(ul);
                 }
-            });
+            }
+            document.getElementById('shoppingItems').textContent = totalItems;
+            document.getElementById('totalIngredients').textContent = `${Object.keys(counts).length}+`;
         }
-        
-        // --- Printer Friendly Shopping List ---
+
+        // Print Functions
+        function printMealPlan() { window.print(); }
         function printShoppingList() {
             const printWindow = window.open('', '_blank');
-            if (!printWindow) {
-                alert("Please allow popups to print the shopping list.");
-                return;
-            }
+            const allIngredients = [];
+            for (const d in currentPlan) { allIngredients.push(...currentPlan[d].breakfast.ingredients, ...currentPlan[d].lunch.ingredients, ...currentPlan[d].dinner.ingredients); }
+            const counts = {}; allIngredients.forEach(i => counts[i] = (counts[i] || 0) + 1);
+            
+             // Re-define categories inside print function scope
+             const categories = {
+                "Produce": ["zucchini", "basil", "garlic", "broccoli", "asparagus", "spinach", "cucumber", "red onion", "lemon", "carrots", "snap peas", "ginger", "butternut squash", "avocado", "banana", "berries", "mushrooms", "onion", "green onions", "mint", "thyme", "rosemary", "dill", "parsley", "sprouts", "cauliflower", "sweet potato", "celery", "corn", "bell peppers", "apple", "lime", "lettuce leaves", "cilantro", "frozen berries", "mango", "coconut flakes", "lime juice", "almond butter", "chia seeds", "kale", "paprika", "tomatoes", "cherry tomatoes", "artichokes", "peas", "saffron", "portobello mushrooms", "eggplant"],
+                "Dairy": ["parmesan cheese", "butter", "Greek yogurt", "heavy cream", "feta cheese", "cheese", "mozzarella", "ricotta", "cottage cheese", "mayo", "mustard", "nutritional yeast"],
+                "Meat & Seafood": ["salmon fillets", "chicken breast", "shrimp", "turkey slices", "beef strips", "cod fillets", "eggs", "firm tofu"],
+                "Pantry": ["chia seeds", "almond milk", "honey", "vanilla extract", "granola", "almonds", "hummus", "rolled oats", "walnuts", "cinnamon", "hemp seeds", "red pepper flakes", "protein powder", "coconut water", "nori", "rice vinegar", "quinoa", "black beans", "marinara sauce", "oregano", "cumin", "curry powder", "tahini", "maple syrup", "arborio rice", "vegetable broth", "white wine", "soy sauce", "sesame oil", "coconut milk", "nutmeg", "blueberries", "breadcrumbs", "turmeric", "tomato paste", "spaghetti", "sesame seeds"],
+                "Bakery": ["bread", "whole wheat tortilla", "sushi rice", "fettuccine"]
+            };
 
-            let listContent = '';
+            let content = `<!DOCTYPE html><html><head><title>Shopping List</title><style>body{font-family:Arial,sans-serif;margin:20px;color:#333}.print-header{text-align:center;margin-bottom:30px}.print-header h1{font-size:2rem;margin-bottom:10px}.two-column{display:flex;flex-wrap:wrap;gap:30px}.column{flex:1;min-width:300px}.category{font-weight:bold;margin:20px 0 10px;border-bottom:1px solid #000}.shopping-item{padding:5px 0;border-bottom:1px solid #ccc;list-style:none}.unit{font-weight:600;color:#2c6e49;margin-left:5px}</style></head><body><div class="print-header"><h1>Shopping List</h1><p>7-Day Meal Plan</p></div><div class="two-column"><div class="column">`;
             
-            // Re-generate list data
-            const allIng = [];
-            Object.values(currentPlan).forEach(day => {
-                allIng.push(...day.breakfast.ingredients, ...day.lunch.ingredients, ...day.dinner.ingredients);
-            });
-            const counts = {};
-            allIng.forEach(i => counts[i] = (counts[i] || 0) + 1);
+            const keys = Object.keys(categories);
+            const mid = Math.ceil(keys.length/2);
             
-            const cats = { "Produce": [], "Pantry": [], "Proteins": [], "Dairy": [] };
-            const produceList = ["zucchini", "spinach", "cucumber", "onion", "broccoli", "carrot", "banana", "berry", "apple", "lemon", "lime", "avocado", "kale", "squash", "mushroom", "pepper", "asparagus", "cilantro", "basil", "mint", "ginger", "garlic", "thyme", "dill", "parsley", "tomato", "potato", "eggplant", "lettuce"];
-            
-            Object.keys(counts).sort().forEach(item => {
-                let cat = "Pantry";
-                if(produceList.some(p => item.toLowerCase().includes(p))) cat = "Produce";
-                else if(["chicken", "beef", "salmon", "shrimp", "cod", "tofu", "turkey", "egg"].some(p => item.toLowerCase().includes(p))) cat = "Proteins";
-                else if(["cheese", "yogurt", "milk", "butter", "cream", "mozzarella", "parmesan"].some(p => item.toLowerCase().includes(p))) cat = "Dairy";
-                
-                cats[cat].push({name: item, count: counts[item]});
-            });
-
-            for(const [cat, items] of Object.entries(cats)) {
-                if(items.length > 0) {
-                    listContent += `<h3>${cat}</h3><ul>`;
-                    items.forEach(i => {
-                        listContent += `<li>${i.name} (x${i.count})</li>`;
-                    });
-                    listContent += `</ul>`;
+            for(let i=0; i<keys.length; i++) {
+                if(i === mid) content += `</div><div class="column">`;
+                const cat = keys[i];
+                const items = [];
+                categories[cat].forEach(ing => { if(counts[ing]) items.push({name:ing, count:counts[ing], unit: ingredientUnits[ing]||"unit"}); });
+                if(items.length) {
+                    content += `<div class="category">${cat}</div><ul>`;
+                    items.forEach(item => content += `<li class="shopping-item">${item.name} <span class="unit">(${item.count} ${item.unit}${item.count>1 && !item.unit.endsWith('s')?'s':''})</span></li>`);
+                    content += `</ul>`;
                 }
             }
-
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Shopping List - Health-Focused Meal Planner</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; padding: 20px; }
-                        h1 { text-align: center; color: #2c6e49; }
-                        h3 { border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-top: 20px; }
-                        ul { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 20px; }
-                        li { margin-bottom: 5px; }
-                        @media print { ul { display: block; column-count: 2; } }
-                    </style>
-                </head>
-                <body>
-                    <h1>Weekly Shopping List</h1>
-                    ${listContent}
-                    <script>window.print();<\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
+            content += `</div></div></body></html>`;
+            printWindow.document.write(content); printWindow.document.close(); printWindow.print();
         }
 
-        // --- Initialization ---
+        // Init
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('generateBtn').onclick = generateMealPlan;
-            document.getElementById('printListBtn').onclick = printShoppingList;
+            document.getElementById('generateBtn').addEventListener('click', generateMealPlan);
+            document.getElementById('printBtn').addEventListener('click', printMealPlan);
+            document.getElementById('printListBtn').addEventListener('click', printShoppingList);
+            document.querySelector('.close-modal').addEventListener('click', closeRecipeModal);
+            document.getElementById('closeNutritionModal').addEventListener('click', closeNutritionModal);
+            window.addEventListener('click', e => { if(e.target===document.getElementById('recipeModal')) closeRecipeModal(); if(e.target===document.getElementById('nutritionModal')) closeNutritionModal(); });
             
-            // Modal Closers
-            document.querySelectorAll('.close-modal').forEach(b => {
-                b.onclick = () => {
-                    document.getElementById('recipeModal').style.display = 'none';
-                    document.getElementById('nutritionModal').style.display = 'none';
-                }
-            });
-            
-            window.onclick = (e) => {
-                if(e.target.classList.contains('modal') || e.target.classList.contains('nutrition-modal')) {
-                    e.target.style.display = 'none';
-                }
-            };
-            
-            // Print buttons (simplified)
-            document.getElementById('printBtn').onclick = () => window.print();
+            // Initial Load
+            const initialGoal = document.querySelector('input[name="healthGoal"]:checked').value;
+            document.getElementById('goalDescription').textContent = goalDescriptions[initialGoal];
+            document.getElementById('nutritionInfoText').innerHTML = goalInfoText[initialGoal];
+            generateMealPlan();
         });
     </script>
 </body>
